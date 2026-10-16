@@ -1,5 +1,5 @@
 const productoService = require('../services/producto.service');
-const { crearProductoDto, actualizarProductoDto, productoResponseDto } = require('../dtos/producto.dto');
+const { crearProductoDto, actualizarProductoDto, ajustarStockDto, productoResponseDto } = require('../dtos/producto.dto');
 
 // Express 5 captura los errores de funciones async y los manda al manejador de errores,
 // por eso no hace falta try/catch aquí
@@ -26,9 +26,15 @@ const actualizar = async (req, res) => {
     res.json(productoResponseDto(producto));
 };
 
+const ajustarStock = async (req, res) => {
+    const { cantidad } = ajustarStockDto(req.body);
+    const producto = await productoService.ajustarStock(req.params.id, cantidad);
+    res.json(productoResponseDto(producto));
+};
+
 const eliminar = async (req, res) => {
     await productoService.eliminar(req.params.id);
     res.status(204).send();
 };
 
-module.exports = { listar, obtener, crear, actualizar, eliminar };
+module.exports = { listar, obtener, crear, actualizar, ajustarStock, eliminar };

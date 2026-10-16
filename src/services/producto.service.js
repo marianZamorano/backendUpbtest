@@ -32,9 +32,19 @@ const actualizar = async (id, datos) => {
     });
 };
 
+// El repositorio solo actualiza si el stock no queda negativo; si no actualizó,
+// averiguamos si fue porque no existe (404) o porque no alcanza el stock (409)
+const ajustarStock = async (id, cantidad) => {
+    const productoId = validarId(id);
+    const producto = await productoRepository.ajustarStock(productoId, cantidad);
+    if (producto) return producto;
+    const actual = await obtenerPorId(productoId);
+    throw new HttpError(409, `Stock insuficiente: disponible ${actual.stock}, se intentó restar ${-cantidad}`);
+};
+
 const eliminar = async (id) => {
     const eliminado = await productoRepository.remove(validarId(id));
     if (!eliminado) throw new HttpError(404, 'Producto no encontrado');
 };
 
-module.exports = { listar, obtenerPorId, crear, actualizar, eliminar };
+module.exports = { listar, obtenerPorId, crear, actualizar, ajustarStock, eliminar };

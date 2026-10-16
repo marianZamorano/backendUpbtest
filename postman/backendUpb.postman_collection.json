@@ -83,6 +83,20 @@
       }
     },
     {
+      "name": "Ajustar stock",
+      "request": {
+        "method": "PATCH",
+        "description": "Suma (cantidad positiva) o resta (cantidad negativa) unidades al stock. Responde 409 si el stock quedaría negativo.",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n    \"cantidad\": -2\n}",
+          "options": { "raw": { "language": "json" } }
+        },
+        "url": { "raw": "{{baseUrl}}/api/productos/{{id}}/stock", "host": ["{{baseUrl}}"], "path": ["api", "productos", "{{id}}", "stock"] }
+      }
+    },
+    {
       "name": "Eliminar producto",
       "request": {
         "method": "DELETE",

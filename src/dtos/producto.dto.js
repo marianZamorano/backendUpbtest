@@ -42,6 +42,15 @@ const crearProductoDto = (body) => validarCampos(body, { parcial: false });
 // DTO de entrada para PUT (todos los campos opcionales)
 const actualizarProductoDto = (body) => validarCampos(body, { parcial: true });
 
+// DTO de entrada para PATCH /:id/stock: cantidad positiva suma, negativa resta
+const ajustarStockDto = (body) => {
+    const { cantidad } = body || {};
+    if (!Number.isInteger(cantidad) || cantidad === 0) {
+        throw new HttpError(400, '"cantidad" debe ser un entero distinto de 0');
+    }
+    return { cantidad };
+};
+
 // DTO de salida: lo que la API devuelve al cliente
 const productoResponseDto = (producto) => ({
     id: producto.id,
@@ -51,4 +60,4 @@ const productoResponseDto = (producto) => ({
     createdAt: producto.createdAt,
 });
 
-module.exports = { crearProductoDto, actualizarProductoDto, productoResponseDto };
+module.exports = { crearProductoDto, actualizarProductoDto, ajustarStockDto, productoResponseDto };
